@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Biblioteca</title>
+</head>
+
+<body>
+
+    <a href="/index.html">Home</a>
+    <a href="/aggiungiLibro.html">Aggiungi Libro</a>
+
+    <h1>Elenco Libri</h1>
+
+    <table id="elenco">
+        <tr>
+            <th>Titolo</th>
+            <th>Editore</th>
+        </tr>
+    </table>
+
+    <div id="scheda"></div>
+
+    <script>
+        const tabella = document.getElementById("elenco");
+        const scheda = document.getElementById("scheda");
+
+        const URL = "/api/libri";
+
+        fetch(URL).then(j => j.json()).then(libri => {
+            for (let libro of libri) {
+                let tr = document.createElement('tr');
+                let td = document.createElement('td');
+                // td.innerHTML = '<a href="/mvc/libri/'+libro.id+'">' + libro.titolo + '</a>' ;
+                td.innerHTML = libro.titolo;
+                td.onclick = function () {
+                    findOne(libro.id);
+                };
+
+                tr.appendChild(td);
+
+                let td2 = document.createElement('td');
+                td2.innerHTML = libro.editore_id;
+                tr.appendChild(td2);
+
+                tabella.appendChild(tr);
+
+
+            }
+        })
+
+
+        function findOne(id) {
+
+            fetch(URL + "/" + id).then(lj => lj.json()).then(libro => {
+
+                let output = '';
+
+                output += '<h1>' + libro.titolo + '</h1>';
+                output += '<p>' + libro.prezzo + '</p>';
+                output += '<p>' + libro.pagine + '</p>';
+
+                scheda.innerHTML = output;
+
+
+            });
+
+        }
+
+        
+    </script>
+
+
+</body>
+
+</html>
